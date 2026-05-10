@@ -1,68 +1,82 @@
-﻿using System.Reflection;
+﻿// ===============================================================
+//  InventarioApp - Programa principal
+//  Autor: Cristian Camilo Ledesma López
+//  Estado: Estructura básica
+// ===============================================================
 
-var assembly = Assembly.GetExecutingAssembly();
-var version = assembly.GetName().Version;
 
-if (args.Length > 0) {
-    switch (args[0].ToLower()) {
-        case "--help":
-        case "-h":
-            MostrarAyuda();
-            Environment.Exit(0);
-            break;
-        case "--version":
-        case "-v":
-            Console.WriteLine($"InventarioApp versión {version}");
-            Environment.Exit(0);
-            break;
-        default:
-            Console.WriteLine($"Opción desconocida: {args[0]}");
-            Console.WriteLine("Usa --help para ver las opciones disponibles.");
-            Environment.Exit(2);
-            break;
-    }
+// Variables
+int cantidadProductos = 0;
+decimal valorTotalInventario = 0.0m;
+bool sistemaActivo = true;
+
+MostrarBanner();
+bool continuar = true;
+
+while (continuar)
+{
+    MostrarMenu();
+    string comando = LeerComando("Ingrese un comando: ");
+    continuar = ProcesarComando(comando);
 }
 
-int cantidadProductos = 0;
-// decimal valorTotalDelInventario = 0.0m;
-bool sistemaActivo = true;
-// string nombreSistema = "Sistema de Gestión de Inventario";
-
-Console.WriteLine("Estado del Sistema:");
-// Console.WriteLine($"Nombre del sistema: {nombreSistema}");
-Console.WriteLine($"Cantidad de productos: {cantidadProductos}");
-// Console.WriteLine($"Valor total del inventario: {valorTotalDelInventario:N2}");
-Console.WriteLine($"Sistema activo: {(sistemaActivo ? "Sí" : "No")}");
-
-Console.WriteLine("Comandos: listar, agregar, buscar, salir");
-Console.Write("Inventario: ");
-string? entrada = Console.ReadLine();
-
-while (sistemaActivo) {
-    switch (entrada?.ToLower()) {
-        case "listar":
-            Console.WriteLine("Listando productos...");
-            Console.WriteLine($"Cantidad de productos: {cantidadProductos}");
-            break;
+bool ProcesarComando(string comando)
+{
+    switch (comando.ToLower())
+    {
         case "agregar":
-            Console.WriteLine("Agregando producto...");
+            AgregarProducto();
+            break;
+        case "listar":
+            ListarProductos();
             break;
         case "buscar":
-            Console.WriteLine("Buscando producto...");
+            BuscarProducto();
             break;
         case "salir":
             Console.WriteLine("Saliendo del sistema...");
-            sistemaActivo = false;
-            break;
+            return false;
         default:
-            Console.WriteLine("Comando no reconocido. Intente nuevamente.");
+            Console.WriteLine("Comando no reconocido. Escribe 'ayuda' para ver las opciones.");
             break;
     }
+    return true;
+}
 
-    if (sistemaActivo) {
-        Console.WriteLine("Comandos: listar, agregar, buscar, salir");
-        entrada = Console.ReadLine();
-    }
+void ListarProductos()
+{
+    Console.WriteLine($"Total: {cantidadProductos} productos en el inventario.");
+    Console.WriteLine($"Valor: ${valorTotalInventario:F2}");
+    // Aquí iría la lógica para mostrar los productos
+}
+
+void AgregarProducto()
+{
+    Console.WriteLine("Agregando un nuevo producto (proximamente)...");
+    // Aquí iría la lógica para agregar un producto al inventario
+}
+
+void BuscarProducto()
+{
+    Console.WriteLine("Buscando un producto (proximamente)...");
+    // Aquí iría la lógica para buscar un producto en el inventario
+}
+
+string LeerComando(string? mensaje)
+{
+    Console.Write(mensaje);
+    return Console.ReadLine() ?? string.Empty;
+}
+
+void MostrarMenu()
+{
+    Console.WriteLine();
+    Console.WriteLine("Comandos disponibles:");
+    Console.WriteLine(" - agregar: Agregar un nuevo producto");
+    Console.WriteLine(" - listar: Listar todos los productos");
+    Console.WriteLine(" - buscar: Buscar un producto por nombre");
+    Console.WriteLine(" - salir: Salir del sistema");
+    Console.WriteLine();
 }
 
 // ===== Funciones =====
@@ -71,10 +85,6 @@ void MostrarBanner()
     Console.WriteLine("╔══════════════════════════════════════╗");
     Console.WriteLine("║   SISTEMA DE GESTIÓN DE INVENTARIO   ║");
     Console.WriteLine("╚══════════════════════════════════════╝");
-    Console.WriteLine();
-    Console.WriteLine($"Versión: {version}");
-    Console.WriteLine($".NET: {Environment.Version}");
-    Console.WriteLine($"Sistema: {Environment.OSVersion.Platform}");
     Console.WriteLine();
 }
 
