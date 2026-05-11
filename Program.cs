@@ -1,75 +1,26 @@
 ﻿using InventarioApp.Models;
 using InventarioApp.Repositories;
+using InventarioApp.Infrastructure;
 
-Console.WriteLine("=== InventarioApp ===");
+Console.WriteLine("=== Prueba Integración JSON ===");
 
-var repo = new InMemoryProductoRepository();
+var almacenamiento = new JsonInventarioStorage();
 
-var laptop = new Producto {
-    Nombre = "Laptop",
-    Precio = 1500.00m,
-    Cantidad = 10,
-    Categoria = CategoriaProducto.Electronica,
-    Estado = EstadoProducto.Disponible
+var productos = new List<Producto> {
+    new Producto { Id = 1, Nombre = "Laptop", Precio = 1500.00m, Cantidad = 10, Categoria = CategoriaProducto.Electronica, Estado = EstadoProducto.Disponible },
+    new Producto { Id = 2, Nombre = "Silla de Oficina", Precio = 200.00m, Cantidad = 5, Categoria = CategoriaProducto.Muebles, Estado = EstadoProducto.Agotado },
+    new Producto { Id = 3, Nombre = "Camiseta", Precio = 25.00m, Cantidad = 20, Categoria = CategoriaProducto.Ropa, Estado = EstadoProducto.Disponible }
 };
 
-var mouse = new Producto {
-    Nombre = "Mouse",
-    Precio = 25.00m,
-    Cantidad = 50,
-    Categoria = CategoriaProducto.Electronica,
-    Estado = EstadoProducto.Disponible
-};
+string ruta = "inventario_test.json";
 
-var teclado = new Producto {
-    Nombre = "Teclado",
-    Precio = 45.00m,
-    Cantidad = 30,
-    Categoria = CategoriaProducto.Electronica,
-    Estado = EstadoProducto.Disponible
-};
+almacenamiento.CrearBackup(ruta);
+almacenamiento.Guardar(productos, ruta);
 
-var silla = new Producto {
-    Nombre = "Silla de Oficina",
-    Precio = 120.00m,
-    Cantidad = 20,
-    Categoria = CategoriaProducto.Muebles,
-    Estado = EstadoProducto.Disponible
-};
+Console.WriteLine("Inventario guardado correctamente.");
 
-var escritorio = new Producto {
-    Nombre = "Escritorio",
-    Precio = 250.00m,
-    Cantidad = 15,
-    Categoria = CategoriaProducto.Muebles,
-    Estado = EstadoProducto.Disponible
-};
+var productosCargados = almacenamiento.Cargar(ruta);
 
-repo.Agregar(laptop);
-repo.Agregar(mouse);
-repo.Agregar(teclado);
-repo.Agregar(silla);
-repo.Agregar(escritorio);
-
-Console.WriteLine($"Total productos en inventario: {repo.CantidadTotal}");
-
-// Consultas con LINQ
-var electronicos = repo.BuscarPorCategoria(CategoriaProducto.Electronica);
-Console.WriteLine("\nProductos en categoría Electrónica:");
-foreach (var producto in electronicos)
-{
-    Console.WriteLine($" - {producto.Nombre}: ${producto.Precio:N2}");
+foreach (var producto in productosCargados) {
+    Console.WriteLine($"Producto: {producto.Nombre}, Precio: {producto.Precio}, Cantidad: {producto.Cantidad}");
 }
-
-var conMouse = repo.BuscarPorNombre("ouse");
-Console.WriteLine("\nProductos que contienen 'ouse' en el nombre:");
-foreach (var producto in conMouse)
-{
-    Console.WriteLine($" - {producto.Nombre}: ${producto.Precio:N2}");
-}
-
-var nombres = repo.ObtenerNombresProductos();
-Console.WriteLine($"\nNombres de todos los productos: {string.Join(", ", nombres)}");
-
-var hayStockBajo = repo.HayStockBajo(25);
-Console.WriteLine($"\n¿Hay productos con stock bajo? {(hayStockBajo ? "Sí" : "No")}");
