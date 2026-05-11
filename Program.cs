@@ -1,97 +1,75 @@
-﻿// ===============================================================
-//  InventarioApp - Programa principal
-//  Autor: Cristian Camilo Ledesma López
-//  Estado: Estructura básica
-// ===============================================================
+﻿using InventarioApp.Models;
+using InventarioApp.Repositories;
 
+Console.WriteLine("=== InventarioApp ===");
 
-// Variables
-int cantidadProductos = 0;
-decimal valorTotalInventario = 0.0m;
-bool sistemaActivo = true;
+var repo = new InMemoryProductoRepository();
 
-MostrarBanner();
-bool continuar = true;
+var laptop = new Producto {
+    Nombre = "Laptop",
+    Precio = 1500.00m,
+    Cantidad = 10,
+    Categoria = CategoriaProducto.Electronica,
+    Estado = EstadoProducto.Disponible
+};
 
-while (continuar)
+var mouse = new Producto {
+    Nombre = "Mouse",
+    Precio = 25.00m,
+    Cantidad = 50,
+    Categoria = CategoriaProducto.Electronica,
+    Estado = EstadoProducto.Disponible
+};
+
+var teclado = new Producto {
+    Nombre = "Teclado",
+    Precio = 45.00m,
+    Cantidad = 30,
+    Categoria = CategoriaProducto.Electronica,
+    Estado = EstadoProducto.Disponible
+};
+
+var silla = new Producto {
+    Nombre = "Silla de Oficina",
+    Precio = 120.00m,
+    Cantidad = 20,
+    Categoria = CategoriaProducto.Muebles,
+    Estado = EstadoProducto.Disponible
+};
+
+var escritorio = new Producto {
+    Nombre = "Escritorio",
+    Precio = 250.00m,
+    Cantidad = 15,
+    Categoria = CategoriaProducto.Muebles,
+    Estado = EstadoProducto.Disponible
+};
+
+repo.Agregar(laptop);
+repo.Agregar(mouse);
+repo.Agregar(teclado);
+repo.Agregar(silla);
+repo.Agregar(escritorio);
+
+Console.WriteLine($"Total productos en inventario: {repo.CantidadTotal}");
+
+// Consultas con LINQ
+var electronicos = repo.BuscarPorCategoria(CategoriaProducto.Electronica);
+Console.WriteLine("\nProductos en categoría Electrónica:");
+foreach (var producto in electronicos)
 {
-    MostrarMenu();
-    string comando = LeerComando("Ingrese un comando: ");
-    continuar = ProcesarComando(comando);
+    Console.WriteLine($" - {producto.Nombre}: ${producto.Precio:N2}");
 }
 
-bool ProcesarComando(string comando)
+var conMouse = repo.BuscarPorNombre("ouse");
+Console.WriteLine("\nProductos que contienen 'ouse' en el nombre:");
+foreach (var producto in conMouse)
 {
-    switch (comando.ToLower())
-    {
-        case "agregar":
-            AgregarProducto();
-            break;
-        case "listar":
-            ListarProductos();
-            break;
-        case "buscar":
-            BuscarProducto();
-            break;
-        case "salir":
-            Console.WriteLine("Saliendo del sistema...");
-            return false;
-        default:
-            Console.WriteLine("Comando no reconocido. Escribe 'ayuda' para ver las opciones.");
-            break;
-    }
-    return true;
+    Console.WriteLine($" - {producto.Nombre}: ${producto.Precio:N2}");
 }
 
-void ListarProductos()
-{
-    Console.WriteLine($"Total: {cantidadProductos} productos en el inventario.");
-    Console.WriteLine($"Valor: ${valorTotalInventario:F2}");
-    // Aquí iría la lógica para mostrar los productos
-}
+var nombres = repo.ObtenerNombresProductos();
+Console.WriteLine($"\nNombres de todos los productos: {string.Join(", ", nombres)}");
 
-void AgregarProducto()
-{
-    Console.WriteLine("Agregando un nuevo producto (proximamente)...");
-    // Aquí iría la lógica para agregar un producto al inventario
-}
-
-void BuscarProducto()
-{
-    Console.WriteLine("Buscando un producto (proximamente)...");
-    // Aquí iría la lógica para buscar un producto en el inventario
-}
-
-string LeerComando(string? mensaje)
-{
-    Console.Write(mensaje);
-    return Console.ReadLine() ?? string.Empty;
-}
-
-void MostrarMenu()
-{
-    Console.WriteLine();
-    Console.WriteLine("Comandos disponibles:");
-    Console.WriteLine(" - agregar: Agregar un nuevo producto");
-    Console.WriteLine(" - listar: Listar todos los productos");
-    Console.WriteLine(" - buscar: Buscar un producto por nombre");
-    Console.WriteLine(" - salir: Salir del sistema");
-    Console.WriteLine();
-}
-
-// ===== Funciones =====
-void MostrarBanner()
-{
-    Console.WriteLine("╔══════════════════════════════════════╗");
-    Console.WriteLine("║   SISTEMA DE GESTIÓN DE INVENTARIO   ║");
-    Console.WriteLine("╚══════════════════════════════════════╝");
-    Console.WriteLine();
-}
-
-void MostrarAyuda() {
-    Console.WriteLine("Uso: InventarioApp [opción]");
-    Console.WriteLine();
-    Console.WriteLine("Opciones:");
-    Console.WriteLine("--  --help,-- -h       Muestra esta ayuda");
-    Console.WriteLine("--  --version,-- -v    Muestra la versión de la aplicación");
-}
+var hayStockBajo = repo.HayStockBajo(25);
+Console.WriteLine($"\n¿Hay productos con stock bajo? {(hayStockBajo ? "Sí" : "No")}");
