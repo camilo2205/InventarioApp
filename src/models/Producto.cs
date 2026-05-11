@@ -6,7 +6,7 @@ public class Producto
     private decimal _precio;
     private int _cantidad;
 
-    public int Id { get; init; }
+    public int Id { get; set; }
 
     public string Nombre
     {
