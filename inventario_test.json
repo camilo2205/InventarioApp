@@ -6,7 +6,7 @@
     "cantidad": 10,
     "categoria": "Electronica",
     "estado": "Disponible",
-    "fechaIngreso": "2026-05-11T11:09:28.8254315-05:00",
+    "fechaIngreso": "2026-05-11T12:40:01.5723392-05:00",
     "valorTotal": 15000.00
   },
   {
@@ -16,7 +16,7 @@
     "cantidad": 5,
     "categoria": "Muebles",
     "estado": "Agotado",
-    "fechaIngreso": "2026-05-11T11:09:28.8306291-05:00",
+    "fechaIngreso": "2026-05-11T12:40:01.5797835-05:00",
     "valorTotal": 1000.00
   },
   {
@@ -26,7 +26,7 @@
     "cantidad": 20,
     "categoria": "Ropa",
     "estado": "Disponible",
-    "fechaIngreso": "2026-05-11T11:09:28.8306316-05:00",
+    "fechaIngreso": "2026-05-11T12:40:01.5797871-05:00",
     "valorTotal": 500.00
   }
 ]

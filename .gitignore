@@ -14,3 +14,7 @@
 #Archivos del sistama
 .DS_Store
 Thumbs.db
+
+#Backups y storage json
+/*_backup_*.json
+/*inventario*.json
